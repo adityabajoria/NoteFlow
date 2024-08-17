@@ -1,20 +1,14 @@
-import "./App.css";
-
+import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import NotesList from "./components/NotesList";
+import ArchiveList from "./components/ArchiveList";
 import SearchBar from "./components/Search";
 import { nanoid } from "nanoid";
-import { useState, useEffect } from "react";
+import "./App.css";
 
 const App = () => {
-  /*
- Additional Features to add in the App:
- - Markdown Support (bold, italic, headers) - use react-markdown lib
- - Use Google Fonts for text
- - Drag-drop notes (react-beautiful-dnd)
- - Note Sharing (enable a 'sharing' button - share using email)
- - Note Archive
- */
   const [notes, setNotes] = useState([]);
+  const [archivedNotes, setArchivedNotes] = useState([]);
   const [search, setSearch] = useState("");
   const [darkMode, setDarkMode] = useState(false);
 
@@ -23,12 +17,19 @@ const App = () => {
     if (savedNotes) {
       setNotes(savedNotes);
     }
+
+    const savedArchivedNotes = JSON.parse(
+      localStorage.getItem("archived-notes-data")
+    );
+    if (savedArchivedNotes) {
+      setArchivedNotes(savedArchivedNotes);
+    }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("notes-data", JSON.stringify(notes));
-    localStorage.setItem("archieved-notes-data", JSON.stringify);
-  }, [notes]);
+    localStorage.setItem("archived-notes-data", JSON.stringify(archivedNotes));
+  }, [notes, archivedNotes]);
 
   const addNote = (text) => {
     const date = new Date();
@@ -37,32 +38,63 @@ const App = () => {
       text: text,
       date: date.toLocaleString(),
     };
-    const newNotes = [...notes, newNote];
-    setNotes(newNotes);
+    setNotes((prevNotes) => [...prevNotes, newNote]);
   };
 
   const deleteNote = (id) => {
-    const updatedNotes = notes.filter((note) => note.id !== id);
-    setNotes(updatedNotes);
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+  };
+
+  const archiveNote = (id) => {
+    const noteToArchive = notes.find((note) => note.id === id);
+    if (noteToArchive) {
+      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+      setArchivedNotes((prevArchivedNotes) => [
+        ...prevArchivedNotes,
+        noteToArchive,
+      ]);
+    }
   };
 
   return (
-    <div className={`${darkMode && "dark-mode"}`}>
-      <div className="container">
-        <h1 className="header">Notes App</h1>
-        <button onClick={() => setDarkMode((prev) => !prev)} className="save">
-          {darkMode ? "lightMode" : "darkMode"}
-        </button>
-        <SearchBar onSearch={setSearch} /> {/* Update prop name */}
-        <NotesList
-          notes={notes.filter((note) =>
-            note.text.toLowerCase().includes(search)
-          )}
-          AddNote={addNote}
-          Delete={deleteNote}
-        />
+    <Router>
+      <div className={`${darkMode ? "dark-mode" : ""}`}>
+        <div className="container">
+          <h1 className="header">NoteFlow</h1>
+          <button onClick={() => setDarkMode((prev) => !prev)} className="save">
+            {darkMode ? "Light Mode" : "Dark Mode"}
+          </button>
+
+          <nav>
+            <Link to="/">Home</Link>
+            <Link to="/archive">Archived Notes</Link>
+          </nav>
+
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <SearchBar onSearch={setSearch} />
+                  <NotesList
+                    notes={notes.filter((note) =>
+                      note.text.toLowerCase().includes(search.toLowerCase())
+                    )}
+                    AddNote={addNote}
+                    Delete={deleteNote}
+                    Archive={archiveNote}
+                  />
+                </>
+              }
+            />
+            <Route
+              path="/archive"
+              element={<ArchiveList archivedNotes={archivedNotes} />}
+            />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 };
 
