@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 const CreateNote = ({ AddNote }) => {
   const [text, setText] = useState("");
@@ -33,6 +34,10 @@ const CreateNote = ({ AddNote }) => {
       </div>
     </div>
   );
+};
+
+CreateNote.propTypes = {
+  AddNote: PropTypes.string.isRequired,
 };
 
 export default CreateNote;

@@ -1,11 +1,10 @@
 import { FaDeleteLeft } from "react-icons/fa6";
-import ReactMarkdown from "react-markdown";
+import PropTypes from "prop-types";
 
 const Note = (props) => {
   const { id, text, date, Delete } = props;
   return (
     <div className="note">
-      <ReactMarkdown>{text}</ReactMarkdown>
       <span>{text}</span>
       <div className="footer">
         <small>{date}</small>
@@ -17,6 +16,13 @@ const Note = (props) => {
       </div>
     </div>
   );
+};
+
+Note.propTypes = {
+  id: PropTypes.number.isRequired,
+  text: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  Delete: PropTypes.func.isRequired,
 };
 
 export default Note;
