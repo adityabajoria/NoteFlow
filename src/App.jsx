@@ -1,3 +1,5 @@
+import "./App.css";
+
 import NotesList from "./components/NotesList";
 import SearchBar from "./components/Search";
 import { nanoid } from "nanoid";

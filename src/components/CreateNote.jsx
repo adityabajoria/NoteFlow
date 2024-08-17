@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const CreateNote = ({ AddNote }) => {
   const [text, setText] = useState("");
-  const charLimit = 100;
+  const charLimit = 250;
 
   const handleText = (e) => {
     if (charLimit - e.target.value.length >= 0) {
@@ -20,8 +20,8 @@ const CreateNote = ({ AddNote }) => {
   return (
     <div className="note create">
       <textarea
-        rows="7"
-        cols="9"
+        rows="10"
+        cols="10"
         value={text}
         placeholder="Add a Note...."
         onChange={handleText}
