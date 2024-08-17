@@ -1,0 +1,92 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dark-mode {
+  background-color: black;
+}
+
+.dark-mode h1 {
+  color: whitesmoke;
+}
+
+.container {
+  max-width: 900px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 12px;
+  padding-left: 12px;
+  min-height: 100vh;
+}
+
+.note {
+  background-color: lightcyan;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 1.5rem;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: pre-wrap;
+}
+
+textarea {
+  border: none;
+  resize: none;
+  background-color: lightcyan;
+}
+
+textarea::focus {
+  outline: none;
+}
+
+.n-list {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.save {
+  background-color: black;
+  color: whitesmoke;
+  border: none;
+  border-radius: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.save::hover {
+  background-color: aliceblue;
+  cursor: pointer;
+}
+
+.del-btn {
+  cursor: pointer;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  background-color: rgb(233, 233, 233);
+  border-radius: 10px;
+  padding: 5px;
+  margin-bottom: 1.3em;
+}
+
+.search input {
+  border: none;
+  background-color: rgb(233, 233, 233);
+}
+
+.search input::focus {
+  outline: none;
+}

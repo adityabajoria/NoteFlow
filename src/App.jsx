@@ -1,5 +1,5 @@
 import NotesList from "./components/NotesList";
-import SearchBar from "./components/SearchBar";
+import SearchBar from "./components/Search";
 import { nanoid } from "nanoid";
 import { useState, useEffect } from "react";
 
