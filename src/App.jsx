@@ -47,7 +47,9 @@ const App = () => {
   return (
     <div className={`${darkMode && "dark-mode"}`}>
       <div className="container">
-        <h1 className="header">Notes App</h1>
+        <div>
+          <h1 className="header">NotesFlow</h1>
+        </div>
         <button onClick={() => setDarkMode((prev) => !prev)} className="save">
           {darkMode ? "lightMode" : "darkMode"}
         </button>
