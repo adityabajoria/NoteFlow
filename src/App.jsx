@@ -1,14 +1,19 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import NotesList from "./components/NotesList";
-import ArchiveList from "./components/ArchiveList";
+import "./App.css";
 import SearchBar from "./components/Search";
 import { nanoid } from "nanoid";
-import "./App.css";
+import { useState, useEffect } from "react";
 
 const App = () => {
+  /*
+ Additional Features to add in the App:
+ - Markdown Support (bold, italic, headers) - use react-markdown lib
+ - Use Google Fonts for text
+ - Drag-drop notes (react-beautiful-dnd)
+ - Note Sharing (enable a 'sharing' button - share using email)
+ - Note Archive
+ */
   const [notes, setNotes] = useState([]);
-  const [archivedNotes, setArchivedNotes] = useState([]);
   const [search, setSearch] = useState("");
   const [darkMode, setDarkMode] = useState(false);
 
@@ -17,19 +22,11 @@ const App = () => {
     if (savedNotes) {
       setNotes(savedNotes);
     }
-
-    const savedArchivedNotes = JSON.parse(
-      localStorage.getItem("archived-notes-data")
-    );
-    if (savedArchivedNotes) {
-      setArchivedNotes(savedArchivedNotes);
-    }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("notes-data", JSON.stringify(notes));
-    localStorage.setItem("archived-notes-data", JSON.stringify(archivedNotes));
-  }, [notes, archivedNotes]);
+  }, [notes]);
 
   const addNote = (text) => {
     const date = new Date();
@@ -38,63 +35,32 @@ const App = () => {
       text: text,
       date: date.toLocaleString(),
     };
-    setNotes((prevNotes) => [...prevNotes, newNote]);
+    const newNotes = [...notes, newNote];
+    setNotes(newNotes);
   };
 
   const deleteNote = (id) => {
-    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
-  };
-
-  const archiveNote = (id) => {
-    const noteToArchive = notes.find((note) => note.id === id);
-    if (noteToArchive) {
-      setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
-      setArchivedNotes((prevArchivedNotes) => [
-        ...prevArchivedNotes,
-        noteToArchive,
-      ]);
-    }
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    setNotes(updatedNotes);
   };
 
   return (
-    <Router>
-      <div className={`${darkMode ? "dark-mode" : ""}`}>
-        <div className="container">
-          <h1 className="header">NoteFlow</h1>
-          <button onClick={() => setDarkMode((prev) => !prev)} className="save">
-            {darkMode ? "Light Mode" : "Dark Mode"}
-          </button>
-
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/archive">Archived Notes</Link>
-          </nav>
-
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <SearchBar onSearch={setSearch} />
-                  <NotesList
-                    notes={notes.filter((note) =>
-                      note.text.toLowerCase().includes(search.toLowerCase())
-                    )}
-                    AddNote={addNote}
-                    Delete={deleteNote}
-                    Archive={archiveNote}
-                  />
-                </>
-              }
-            />
-            <Route
-              path="/archive"
-              element={<ArchiveList archivedNotes={archivedNotes} />}
-            />
-          </Routes>
-        </div>
+    <div className={`${darkMode && "dark-mode"}`}>
+      <div className="container">
+        <h1 className="header">Notes App</h1>
+        <button onClick={() => setDarkMode((prev) => !prev)} className="save">
+          {darkMode ? "lightMode" : "darkMode"}
+        </button>
+        <SearchBar onSearch={setSearch} /> {/* Update prop name */}
+        <NotesList
+          notes={notes.filter((note) =>
+            note.text.toLowerCase().includes(search)
+          )}
+          AddNote={addNote}
+          Delete={deleteNote}
+        />
       </div>
-    </Router>
+    </div>
   );
 };
 

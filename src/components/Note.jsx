@@ -1,8 +1,8 @@
-import { FaDeleteLeft, FaArchive } from "react-icons/fa6";
+import { FaDeleteLeft } from "react-icons/fa6";
 import PropTypes from "prop-types";
 
 const Note = (props) => {
-  const { id, text, date, Delete, Archive } = props;
+  const { id, text, date, Delete } = props;
   return (
     <div className="note">
       <span>{text}</span>
@@ -11,11 +11,6 @@ const Note = (props) => {
         <FaDeleteLeft
           onClick={() => Delete(id)}
           className="del-btn"
-          size="1.2em"
-        />
-        <FaArchive
-          onClick={() => Archive(id)}
-          className="archive-btn"
           size="1.2em"
         />
       </div>
